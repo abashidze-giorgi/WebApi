@@ -120,5 +120,36 @@ namespace WebApi.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+
+        [HttpPost("UserValidation")]
+        public IActionResult UserValidation([FromForm] string userName, string password)
+        {
+            var status = UserValidation(userName, password, out UserModel user);
+            return status ? Ok(user) : StatusCode(404, "Incorrect Password or username");
+        }
+
+        private bool UserValidation(string userName, string password, out UserModel user)
+        {
+            try
+            {
+                var newUser = _context.Users.Where(u => u.UserName == userName && u.Password == password).FirstOrDefault();
+                if (newUser != null)
+                {
+                    user = newUser;
+                    return true;
+                }
+                else
+                {
+                    user = new UserModel();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                user = new UserModel();
+                return false;
+            }
+        }
     }
 }
