@@ -14,7 +14,7 @@ namespace WebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private DataContext _context;
+        private protected DataContext _context;
 
         public UserController(DataContext context)
         {
