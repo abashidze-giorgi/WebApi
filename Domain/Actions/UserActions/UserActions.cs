@@ -87,7 +87,6 @@ namespace Domain.Actions.UserActions
 
         private bool CheckUserParamsWhenEditUser(List<UserModel> userList, UserModel user, out string result)
         {
-            int userIndex = 0;
             foreach(var u in userList)
             {
                 if(u.Id == user.Id)

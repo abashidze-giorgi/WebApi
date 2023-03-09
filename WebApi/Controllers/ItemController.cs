@@ -16,15 +16,17 @@ namespace WebApi.Controllers
             _context = context;
         }
 
-        [HttpGet("GetAll")]
-        public IActionResult Get()
+        [HttpGet("Computers/GetAll")]
+        public IActionResult GetComps()
         {
             try
             {
-                var itemList = _context.Items.ToList();
-                if(itemList .Count > 0)
+                var compList = _context.Computers.ToList();
+
+
+                if(compList.Count > 0)
                 {
-                    return Ok(itemList);
+                    return Ok(compList);
                 }
                 else
                 {
@@ -38,7 +40,54 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("Create Computer")]
-        public IActionResult CreateComputer([FromForm] ComputerModel computer)
+        public IActionResult CreateComp([FromForm] ComputerModel computer)
+        {
+            try
+            {
+                var cc = new ComputerCreate();
+                var comp = cc.Create(_context.Computers.ToList(), computer, out string result);
+                if (result == "Ok")
+                {
+                    _context.Computers.Add(comp);
+                    _context.SaveChanges();
+                    var comps = _context.Computers.ToList();
+                    return Ok(comps);
+                }
+                return StatusCode(404, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+
+        [HttpGet("Telephones/GetAll")]
+        public IActionResult GetPhones()
+        {
+            try
+            {
+                var compList = _context.Computers.ToList();
+
+
+                if (compList.Count > 0)
+                {
+                    return Ok(compList);
+                }
+                else
+                {
+                    return StatusCode(404, "No items found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("Create Computer")]
+        public IActionResult CreatePhones([FromForm] ComputerModel computer)
         {
             try
             {
