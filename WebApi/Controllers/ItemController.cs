@@ -61,19 +61,17 @@ namespace WebApi.Controllers
             }
         }
 
-
-
         [HttpGet("Telephones/GetAll")]
         public IActionResult GetPhones()
         {
             try
             {
-                var compList = _context.Computers.ToList();
+                var phoneList = _context.Telephones.ToList();
 
 
-                if (compList.Count > 0)
+                if (phoneList.Count > 0)
                 {
-                    return Ok(compList);
+                    return Ok(phoneList);
                 }
                 else
                 {
@@ -86,19 +84,19 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpPost("Create Computer")]
-        public IActionResult CreatePhones([FromForm] ComputerModel computer)
+        [HttpPost("Create Phone")]
+        public IActionResult CreatePhones([FromForm] TelephoneModel phone)
         {
             try
             {
-                var cc = new ComputerCreate();
-                var comp = cc.Create(_context.Computers.ToList(), computer, out string result);
+                var cc = new PhoneCreate();
+                var ph = cc.Create(_context.Telephones.ToList(), phone, out string result);
                 if (result == "Ok")
                 {
-                    _context.Computers.Add(comp);
+                    _context.Telephones.Add(ph);
                     _context.SaveChanges();
-                    var comps = _context.Computers.ToList();
-                    return Ok(comps);
+                    var phones = _context.Telephones.ToList();
+                    return Ok(phones);
                 }
                 return StatusCode(404, result);
             }
