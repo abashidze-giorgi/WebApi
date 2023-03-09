@@ -18,7 +18,7 @@ namespace DataBase
         public DbSet<ItemModel> Items { get; set; }
         public DbSet<ComputerModel> Computers { get; set;}
         public DbSet<TelephoneModel> Telephones { get; set; }
-        public DbSet<BasketModel> Baskets { get; set; }
+        public DbSet<BasketModel<ItemModel>> Baskets { get; set; }
         
     }
 }

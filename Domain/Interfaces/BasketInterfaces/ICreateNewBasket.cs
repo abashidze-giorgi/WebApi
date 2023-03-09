@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.BasketInterfaces
 {
-    public interface ICreateNewBasket
+    public interface ICreateNewBasket<T> where T : ItemModel
     {
-        public BasketModel Create(UserModel user);
+        public BasketModel<T> Create(UserModel user);
     }
 }

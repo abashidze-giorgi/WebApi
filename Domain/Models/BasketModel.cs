@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class BasketModel
+    public class BasketModel<T>
     {
         [Key]
         public int Id { get; set; }
         public int UserId { get; set; }
         public int ItemId { get; set; }
-        public List<ItemModel> Items { get; set; }
+        public List<T> Items { get; set; }
     }
 }

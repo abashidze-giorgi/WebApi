@@ -52,9 +52,12 @@ namespace WebApi.Controllers
                 var user = nu.Create(_context.Users.ToList(), request, out string result);
                 if (result == "Ok")
                 {
-                    var ab = new CreateBasketAction();
-                    var basket = ab.Create(user);
+                    var createBasket = new CreateBasketAction();
+
+                    BasketModel<ItemModel> basket = createBasket.Create(user);
+
                     _context.Baskets.Add(basket);
+
                     _context.SaveChanges();
                     user.BasketId = basket.Id;
                      _context.Users.Add(user);

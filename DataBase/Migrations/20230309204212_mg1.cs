@@ -4,7 +4,7 @@
 
 namespace DataBase.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class mg1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,7 +48,7 @@ namespace DataBase.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false),
-                    BasketModelId = table.Column<int>(type: "int", nullable: true),
+                    BasketModelItemModelId = table.Column<int>(name: "BasketModel<ItemModel>Id", type: "int", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CPU = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GPU = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -61,16 +61,16 @@ namespace DataBase.Migrations
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_Baskets_BasketModelId",
-                        column: x => x.BasketModelId,
+                        name: "FK_Items_Baskets_BasketModel<ItemModel>Id",
+                        column: x => x.BasketModelItemModelId,
                         principalTable: "Baskets",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_BasketModelId",
+                name: "IX_Items_BasketModel<ItemModel>Id",
                 table: "Items",
-                column: "BasketModelId");
+                column: "BasketModel<ItemModel>Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

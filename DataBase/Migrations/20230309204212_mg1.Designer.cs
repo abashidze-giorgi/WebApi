@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230309062721_mig1")]
-    partial class mig1
+    [Migration("20230309204212_mg1")]
+    partial class mg1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace DataBase.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Domain.Models.BasketModel", b =>
+            modelBuilder.Entity("Domain.Models.BasketModel<Domain.Models.ItemModel>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace DataBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("BasketModelId")
+                    b.Property<int?>("BasketModel<ItemModel>Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Discriminator")
@@ -70,7 +70,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BasketModelId");
+                    b.HasIndex("BasketModel<ItemModel>Id");
 
                     b.ToTable("Items");
 
@@ -149,12 +149,12 @@ namespace DataBase.Migrations
 
             modelBuilder.Entity("Domain.Models.ItemModel", b =>
                 {
-                    b.HasOne("Domain.Models.BasketModel", null)
+                    b.HasOne("Domain.Models.BasketModel<Domain.Models.ItemModel>", null)
                         .WithMany("Items")
-                        .HasForeignKey("BasketModelId");
+                        .HasForeignKey("BasketModel<ItemModel>Id");
                 });
 
-            modelBuilder.Entity("Domain.Models.BasketModel", b =>
+            modelBuilder.Entity("Domain.Models.BasketModel<Domain.Models.ItemModel>", b =>
                 {
                     b.Navigation("Items");
                 });
