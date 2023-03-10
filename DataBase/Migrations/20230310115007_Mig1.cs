@@ -4,10 +4,26 @@
 
 namespace DataBase.Migrations
 {
-    public partial class mg1 : Migration
+    public partial class Mig1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Baskets",
                 columns: table => new
@@ -20,23 +36,12 @@ namespace DataBase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Baskets", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BasketId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Baskets_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,7 +53,7 @@ namespace DataBase.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false),
-                    BasketModelItemModelId = table.Column<int>(name: "BasketModel<ItemModel>Id", type: "int", nullable: true),
+                    BasketId = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CPU = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GPU = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -61,16 +66,23 @@ namespace DataBase.Migrations
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_Baskets_BasketModel<ItemModel>Id",
-                        column: x => x.BasketModelItemModelId,
+                        name: "FK_Items_Baskets_BasketId",
+                        column: x => x.BasketId,
                         principalTable: "Baskets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_BasketModel<ItemModel>Id",
+                name: "IX_Baskets_UserId",
+                table: "Baskets",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_BasketId",
                 table: "Items",
-                column: "BasketModel<ItemModel>Id");
+                column: "BasketId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -79,10 +91,10 @@ namespace DataBase.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Baskets");
 
             migrationBuilder.DropTable(
-                name: "Baskets");
+                name: "Users");
         }
     }
 }

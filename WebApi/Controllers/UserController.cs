@@ -1,5 +1,4 @@
 ﻿using DataBase;
-using Domain.Actions.BasketActions;
 using Domain.Actions.UserActions;
 using Domain.Interfaces.BasketInterfaces;
 using Domain.Models;
@@ -52,15 +51,7 @@ namespace WebApi.Controllers
                 var user = nu.Create(_context.Users.ToList(), request, out string result);
                 if (result == "Ok")
                 {
-                    var createBasket = new CreateBasketAction();
-
-                    BasketModel<ItemModel> basket = createBasket.Create(user);
-
-                    _context.Baskets.Add(basket);
-
-                    _context.SaveChanges();
-                    user.BasketId = basket.Id;
-                     _context.Users.Add(user);
+                    _context.Users.Add(user);
                     _context.SaveChanges();
                     var users = _context.Users.ToList();
                     return Ok(users);
@@ -153,6 +144,12 @@ namespace WebApi.Controllers
                 user = new UserModel();
                 return false;
             }
+        }
+
+        [HttpGet("Basket_GetALl")]
+        public IActionResult getBaskets()
+        {
+            return Ok(_context.Baskets.ToList());
         }
     }
 }

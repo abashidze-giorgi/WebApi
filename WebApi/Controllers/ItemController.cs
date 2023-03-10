@@ -44,16 +44,17 @@ namespace WebApi.Controllers
         {
             try
             {
-                var cc = new ComputerCreate();
-                var comp = cc.Create(_context.Computers.ToList(), computer, out string result);
-                if (result == "Ok")
+                var cc = new ComputerEditor();
+                var itemList = _context.Items.ToList();
+                var comp = cc.CreateItem(computer, itemList);
+                if (comp != null)
                 {
-                    _context.Computers.Add(comp);
+                    var comps = new List<ComputerModel> { comp };
+                    _context.Items.AddRange(comps);
                     _context.SaveChanges();
-                    var comps = _context.Computers.ToList();
-                    return Ok(comps);
+                    return Ok(_context.Computers.ToList());
                 }
-                return StatusCode(404, result);
+                return StatusCode(404, "BadRequest");
             }
             catch (Exception ex)
             {
@@ -89,16 +90,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                var cc = new PhoneCreate();
-                var ph = cc.Create(_context.Telephones.ToList(), phone, out string result);
-                if (result == "Ok")
-                {
-                    _context.Telephones.Add(ph);
-                    _context.SaveChanges();
-                    var phones = _context.Telephones.ToList();
-                    return Ok(phones);
-                }
-                return StatusCode(404, result);
+                var cc = new PhoneEditor();
+                var itemList = _context.Items.ToList();
+                var ph = cc.CreateItem(phone, itemList);
+                _context.SaveChanges();
+                var phones = _context.Telephones.ToList();
+                return Ok(phones);
             }
             catch (Exception ex)
             {

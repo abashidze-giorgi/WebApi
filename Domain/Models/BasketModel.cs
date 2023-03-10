@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class BasketModel<T>
+    public class BasketModel
     {
-        [Key]
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public int UserId { get; set; }  // свойство для связи с пользователем
         public int ItemId { get; set; }
-        public List<T> Items { get; set; }
+        public List<ItemModel> Items { get; set; } = new List<ItemModel>();  // список товаров в корзине
     }
 }

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Interfaces.BasketInterfaces
+namespace Domain.Interfaces.ItemInterface
 {
-    public interface ICreateNewBasket<T> where T : ItemModel
+    public interface IItemEditor<T, T1> where T : ItemModel
     {
-        public BasketModel Create(UserModel user);
+        public T CreateItem(T item, List<T1> items);
     }
 }

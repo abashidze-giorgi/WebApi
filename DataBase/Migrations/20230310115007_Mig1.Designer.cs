@@ -3,6 +3,7 @@ using DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230310115007_Mig1")]
+    partial class Mig1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,21 +22,6 @@ namespace DataBase.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("BasketModelItemModel", b =>
-                {
-                    b.Property<int>("BasketsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BasketsId", "ItemsId");
-
-                    b.HasIndex("ItemsId");
-
-                    b.ToTable("BasketModelItemModel");
-                });
 
             modelBuilder.Entity("Domain.Models.BasketModel", b =>
                 {
@@ -66,6 +53,9 @@ namespace DataBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("BasketId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -82,6 +72,8 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BasketId");
+
                     b.ToTable("Items");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("ItemModel");
@@ -94,9 +86,6 @@ namespace DataBase.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("BasketId")
-                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -157,21 +146,6 @@ namespace DataBase.Migrations
                     b.HasDiscriminator().HasValue("TelephoneModel");
                 });
 
-            modelBuilder.Entity("BasketModelItemModel", b =>
-                {
-                    b.HasOne("Domain.Models.BasketModel", null)
-                        .WithMany()
-                        .HasForeignKey("BasketsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.ItemModel", null)
-                        .WithMany()
-                        .HasForeignKey("ItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Models.BasketModel", b =>
                 {
                     b.HasOne("Domain.Models.UserModel", null)
@@ -179,6 +153,20 @@ namespace DataBase.Migrations
                         .HasForeignKey("Domain.Models.BasketModel", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.ItemModel", b =>
+                {
+                    b.HasOne("Domain.Models.BasketModel", null)
+                        .WithMany("Items")
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.BasketModel", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Domain.Models.UserModel", b =>

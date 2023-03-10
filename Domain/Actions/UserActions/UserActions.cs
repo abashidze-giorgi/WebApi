@@ -1,5 +1,4 @@
-﻿using Domain.Actions.BasketActions;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 using Domain.Interfaces.UserInterface;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +23,7 @@ namespace Domain.Actions.UserActions
                     LastName = request.LastName,
                     UserName = request.UserName,
                     Password = request.Password,
+                    Basket = new BasketModel()
                 };
                 if(!CheckUserExistWhenCreateNewUser(userList, user))
                 {
@@ -54,11 +54,10 @@ namespace Domain.Actions.UserActions
                     LastName = user.LastName,
                     UserName = user.UserName,
                     Password = user.Password,
+                    Basket = new BasketModel()
                 };
                 if(CheckUserParamsWhenEditUser(userList, user, out result))
                 {
-                    newUser.BasketId = user.BasketId;
-                    newUser.Id = user.Id;
                     return newUser;
                 }
                 else
@@ -91,16 +90,8 @@ namespace Domain.Actions.UserActions
             {
                 if(u.Id == user.Id)
                 {
-                    if (u.BasketId == user.BasketId)
-                    {
-                        result = "Ok";
-                        return true;
-                    }
-                    else
-                    {
-                        result = "Cant change basket id";
-                        return false;
-                    }
+                    result = "Ok";
+                    return true;
                 }
             }
             result = "Can't find user";
