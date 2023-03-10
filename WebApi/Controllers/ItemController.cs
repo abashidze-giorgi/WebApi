@@ -19,6 +19,12 @@ namespace WebApi.Controllers
         [HttpGet("Computers/GetAll")]
         public IActionResult GetComps()
         {
+            var p = _context.Telephones.ToList();
+            var c = _context.Computers.ToList();
+            var a = new List<ItemModel>();
+            a.AddRange(c);
+            a.AddRange(p);
+            return Ok(a);
             try
             {
                 var compList = _context.Computers.ToList();
@@ -49,10 +55,15 @@ namespace WebApi.Controllers
                 var comp = cc.CreateItem(computer, itemList);
                 if (comp != null)
                 {
-                    var comps = new List<ComputerModel> { comp };
+                    var comps = new List<ItemModel> { comp };
                     _context.Items.AddRange(comps);
                     _context.SaveChanges();
-                    return Ok(_context.Computers.ToList());
+                    var p = _context.Telephones.ToList();
+                    var c = _context.Computers.ToList();
+                    var a = new List<ItemModel>();
+                    a.AddRange(c);
+                    a.AddRange(p);
+                    return Ok(a);
                 }
                 return StatusCode(404, "BadRequest");
             }
@@ -92,10 +103,20 @@ namespace WebApi.Controllers
             {
                 var cc = new PhoneEditor();
                 var itemList = _context.Items.ToList();
-                var ph = cc.CreateItem(phone, itemList);
-                _context.SaveChanges();
-                var phones = _context.Telephones.ToList();
-                return Ok(phones);
+                var newPhone = cc.CreateItem(phone, itemList);
+                if (newPhone != null)
+                {
+                    var comps = new List<ItemModel> { newPhone };
+                    _context.Items.AddRange(comps);
+                    _context.SaveChanges();
+                    var p = _context.Telephones.ToList();
+                    var c = _context.Computers.ToList();
+                    var a = new List<ItemModel>();
+                    a.AddRange(c);
+                    a.AddRange(p);
+                    return Ok(a);
+                }
+                return StatusCode(404, "BadRequest");
             }
             catch (Exception ex)
             {

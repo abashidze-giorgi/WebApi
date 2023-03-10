@@ -12,7 +12,15 @@ namespace Domain.Actions.ItemActions
     {
         public TelephoneModel CreateItem(TelephoneModel item, List<ItemModel> items)
         {
-            var phone = item as TelephoneModel;
+            var phone = new TelephoneModel
+            {
+                Name = item.Name,
+                Price = item.Price,
+                Rating = item.Rating,
+                Battery = item.Battery,
+                Display = item.Display,
+                Model = item.Model,
+            };
             if (items.Any(i => i.Id == item.Id))
             {
                 throw new ArgumentException("Item with the same Id already exists.");
