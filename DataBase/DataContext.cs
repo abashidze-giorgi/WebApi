@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace DataBase
 {
@@ -22,18 +23,12 @@ namespace DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+                base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserModel>()
-                .HasOne(u => u.Basket)  // один пользователь имеет одну корзину
-                .WithOne()   // одна корзина принадлежит одному пользователю
-                .HasForeignKey<BasketModel>(b => b.UserId); // связываем корзину с пользователем через поле UserId
-
-            //modelBuilder.Entity<BasketModel>()
-            //.HasMany(b => b.Items)  // одна корзина может содержать множество товаров
-            //.WithOne() // множество товаров относятся к одной корзине
-            //.HasForeignKey(i => i.BasketId); // связываем товары с корзиной через поле BasketId
-
+                modelBuilder.Entity<UserModel>()
+                    .HasOne(u => u.Basket)  // один пользователь имеет одну корзину
+                    .WithOne()   // одна корзина принадлежит одному пользователю
+                    .HasForeignKey<BasketModel>(b => b.UserId); // связываем корзину с пользователем через поле UserId
         }
     }
 }

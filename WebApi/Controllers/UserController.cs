@@ -117,10 +117,10 @@ namespace WebApi.Controllers
 
 
         [HttpPost("UserValidation")]
-        public IActionResult UserValidation([FromForm] string userName, string password)
+        public bool UserValidation([FromForm] string userName, string password)
         {
             var status = UserValidation(userName, password, out UserModel user);
-            return status ? Ok(user) : StatusCode(404, "Incorrect Password or username");
+            return status ? true : false;
         }
 
         private bool UserValidation(string userName, string password, out UserModel user)
@@ -150,6 +150,26 @@ namespace WebApi.Controllers
         public IActionResult getBaskets()
         {
             return Ok(_context.Baskets.ToList());
+        }
+        [HttpPost("AddItemToBasket")]
+        public IActionResult AddItemToBasket(int itemId, int userId, string userName, string password)
+        {
+            if(UserValidation(userName, password))
+            {
+                var user = _context.Users.Where(u => u.Password == password && u.UserName == userName).FirstOrDefault();
+                var item = _context.Items.Where(u => u.Id == itemId).FirstOrDefault();
+                if(item != null)
+                {
+                    var basket = _context.Baskets.Where(b => b.UserId == userId).FirstOrDefault();
+                    basket.Items.Add(item.Id);
+
+                    _context.Baskets.Update(basket);                    
+                    _context.SaveChanges();
+                    return Ok(basket);
+                }
+            }
+            
+            return Ok(new BasketModel());
         }
     }
 }

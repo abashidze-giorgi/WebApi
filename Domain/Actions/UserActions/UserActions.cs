@@ -23,7 +23,14 @@ namespace Domain.Actions.UserActions
                     LastName = request.LastName,
                     UserName = request.UserName,
                     Password = request.Password,
-                    Basket = new BasketModel()
+                    Basket = new BasketModel
+                    {
+                        Id = 0,
+                        Items = new List<int>
+                        {
+
+                        },
+                    }
                 };
                 if(!CheckUserExistWhenCreateNewUser(userList, user))
                 {

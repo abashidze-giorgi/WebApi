@@ -16,5 +16,6 @@ namespace Domain.Models
         public string Password { get; set; }
         public int BasketId { get; set; }
         public BasketModel Basket { get; set; }  // свойство для связи с корзиной
+
     }
 }
