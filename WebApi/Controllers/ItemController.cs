@@ -19,12 +19,6 @@ namespace WebApi.Controllers
         [HttpGet("Computers/GetAll")]
         public IActionResult GetComps()
         {
-            var p = _context.Telephones.ToList();
-            var c = _context.Computers.ToList();
-            var a = new List<ItemModel>();
-            a.AddRange(c);
-            a.AddRange(p);
-            return Ok(a);
             try
             {
                 var compList = _context.Computers.ToList();
